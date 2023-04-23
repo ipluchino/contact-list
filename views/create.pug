@@ -1,0 +1,61 @@
+extends layout.pug 
+
+block content 
+    .container.mt-3.mt-lg-5
+        h1.text-center.pb-2 Create Contact
+        .card.bg-light-gray
+            form.form.row.mx-2.mx-sm-3.mt-1.gx-lg-4.gy-2.gy-lg-3(action='/create' method='post')
+                .form-group.col.col-12
+                    h4 Basic Info
+                .form-group.col.col-3.col-lg-2
+                    label.form-label(for='title') Title:
+                    select.form-select.text-center(name='title')
+                        option(selected) Mr.
+                        option Ms.
+                        option Mrs.
+                        option Dr.
+                .form-group.col.col-9.col-lg-4
+                    label.form-label(for='first') First Name:
+                    input.form-control(name='first')
+                .form-group.col.col-12.col-lg-6
+                    label.form-label(for='last') Last Name:
+                    input.form-control(name='last')
+                .form-group.col.col-12.col-lg-6
+                    label.form-label(for='phone') Phone:
+                    input.form-control(type='tel' name='phone')
+                .form-group.col.col-12.col-lg-6.mb-4
+                    label.form-label(for='email') Email:
+                    input.form-control(type='email' name='email')
+                .form-group.col.col-12
+                    h4 Address
+                .form-group.col.col-12
+                    label.form-label(for='street') Street:
+                    input.form-control(name='street')
+                .form-group.col.col-12
+                    label.form-label(for='city') City:
+                    input.form-control(name='city')
+                .form-group.col.col-12.col-lg-6
+                    label.form-label(for='state') State:
+                    input.form-control(name='state')
+                .form-group.col.col-12.col-lg-6
+                    label.form-label(for='zip') Zip:
+                    input.form-control(name='zip')
+                .form-group.col.col-12.mb-4
+                    label.form-label(for='country') Country:
+                    input.form-control(name='country')
+                .form-group.col.col-12
+                    h4 Contact Preferences
+                .form-group.col.col-12
+                    .form-check.mb-2
+                        input.form-check-input(type='checkbox' name='contact_by_phone')
+                        label.form-check-label(for='contact_by_phone') Contact by phone
+                    .form-check.mb-2
+                        input.form-check-input(type='checkbox' name='contact_by_email')
+                        label.form-check-label(for='contact_by_email') Contact by email
+                    .form-check.mb-2
+                        input.form-check-input(type='checkbox' name='contact_by_mail')
+                        label.form-check-label(for='contact_by_mail') Contact by mail
+                .form-group.col.col-12.mb-4
+                    button.btn.btn-primary(type='submit') Add
+                    a.btn.btn-link(href ='/') Cancel
+                

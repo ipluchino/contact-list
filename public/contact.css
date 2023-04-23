@@ -1,0 +1,82 @@
+* {
+    font-size: large;
+}
+
+.bg-light-gray {
+    background-color: rgb(238, 238, 238);
+}
+
+.bg-light-red {
+    background-color: rgb(253, 219, 219);
+}
+
+.delete-btn {
+    width:20%;
+}
+
+.btn-special {
+    width:100px;
+}
+
+#map-container {
+    position:relative; 
+    height:700px; 
+    margin-bottom:2rem; 
+}
+
+#map { 
+    position: absolute; 
+    top: 0; 
+    bottom: 0; 
+    width: 100%;
+}
+
+.scroll {
+    max-height: 600px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+/*
+li:nth-child(even) { background: rgba(0, 0, 0, 0.05) }
+*/
+
+@media screen and (width < 992px) {
+    .fix-border-top {
+        border-top: 1px solid !important; 
+        border-top-color:rgba(0, 0, 0, 0.125) !important;
+    }
+}
+
+
+@media screen and (max-width: 576px) {
+    .phone-btn {
+        font-size: medium;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .delete-btn {
+        width: 25%;
+    }
+
+    #map-container {
+        position:relative; 
+        height:500px; 
+        margin-bottom:2rem; 
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .signin {
+        max-width: 768px;
+    }
+
+    .signup {
+        max-width: 768px;
+    }
+
+    .delete {
+        max-width: 768px;
+    }
+}

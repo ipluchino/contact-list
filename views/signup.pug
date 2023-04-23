@@ -1,0 +1,33 @@
+extends layout.pug
+
+block content
+    .container.signup.mt-3.mt-lg-5
+        h1.pb-2.text-center Sign up
+        .alert.alert-info
+            span Please fill out all of the information below. There are no special password rules here.
+        .card.bg-light-gray
+            form.form.row.g-2.gx-3.mx-3.mt-1(action='/signup' method='post')
+                .form-group.col.col-12.col-lg-6
+                    label.form-label(for='first') First Name
+                    input.form-control(name='first' required)
+                .form-group.col.col-12.col-lg-6
+                    label.form-label(for='last') Last Name
+                    input.form-control(name='last' required)
+                .form-group.col.col-12
+                    label.form-label(for='username') Username
+                    input.form-control(name='username' required)
+                .form-group.col.col-12
+                    label.form-label(for='password') Password
+                    input.form-control(name='password' type='password' required)
+                .form-group.col.col-12.mb-4
+                    label.form-label(for='password2') Confirm Password
+                    input.form-control(name='password2' type='password' required)
+                .form-group.col.col-6.d-grid.mx-auto
+                    button.btn.btn-primary(type='submit') Sign up
+                .form-group.col.col-12.text-center.mb-2
+                    a(href ='/') Back
+                .form-group.col-12.text-center.mb-2
+                    span Already have an account? #[a(href='/login') Sign in]
+        if message
+            .alert.alert-danger
+                span #{message}

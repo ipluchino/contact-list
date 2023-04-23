@@ -1,0 +1,178 @@
+extends layout.pug 
+
+block content 
+    .container#contacts
+        .row
+            .col.col-7
+                h2 Contact List
+            .col.col-5.mb-3
+                a.btn.btn-primary.float-end.phone-btn(href='/create') New Contact
+        ul.list-group.scroll.mb-3
+            li.list-group-item
+                .container
+                    .row
+                        .col.col-12.col-lg-3.mb-2.mt-2
+                            input.form-control#filter-fname(name='filter-first-name' placeholder = 'Filter By First Name' @input='filterContacts()')
+                        .col.col-12.col-lg-3.mb-2.mt-2
+                            input.form-control#filter-lname(name='filter-last-name' placeholder = 'Filter By Last Name' @input='filterContacts()')
+            li.list-group-item.d-none.d-lg-block
+                .container
+                    .row.fw-bold
+                        if user
+                            .col.col-2 Name
+                            .col.col-3 Contact Info
+                            .col.col-3 Address
+                            .col.col-2.text-center Contact By
+                            .col.col-2.text-center Actions
+                        else
+                            .col.col-3 Name
+                            .col.col-3 Contact Info
+                            .col.col-4 Address
+                            .col.col-2 Contact By
+            li.list-group-item(v-for='contact in contacts' @click='clickElement' :data-lat='contact.Latitude' :data-lng='contact.Longitude')
+                .container
+                    .row
+                        if user
+                            .col.col-12.col-lg-2.mb-3
+                                a.text-break(v-if='!contact.First_Name && !contact.Last_Name', :href="'/' + contact.ID") No Name Provided
+                                a.text-break(v-else, :href="'/' + contact.ID") {{contact.Title}} {{contact.First_Name}} {{contact.Last_Name}}
+                            .col.col-12.col-lg-3.mb-3
+                                span.text-break {{contact.Phone_Number}}
+                                br(v-if='contact.Phone_Number')
+                                span.text-break {{contact.Email_Address}}
+                            .col.col-12.col-lg-3.mb-3
+                                span.text-break {{contact.Address}}
+                            .col.col-12.col-lg-2.mb-4.mb-lg-3
+                                input.ms-lg-3.ms-xl-4.ms-xxl-5(:id="'phone' + contact.ID" type='checkbox' disabled :checked='isChecked(contact.Contact_By_Phone)')
+                                label.ms-1(:for="'phone' + contact.ID") Phone
+                                br
+                                input.ms-lg-3.ms-xl-4.ms-xxl-5(:id="'email' + contact.ID" type='checkbox' disabled :checked='isChecked(contact.Contact_By_Email)')
+                                label.ms-1(:for="'email' + contact.ID") Email
+                                br
+                                input.ms-lg-3.ms-xl-4.ms-xxl-5(:id="'mail' + contact.ID" type='checkbox' disabled :checked='isChecked(contact.Contact_By_Mail)')
+                                label.ms-1(:for="'Mail' + contact.ID") Mail
+                            .col.text-center
+                                a.btn.btn-sm.btn-primary.btn-special.mb-lg-2.mt-lg-1.me-3.me-lg-0(:href="'/' + contact.ID + '/edit'") Edit
+                                a.btn.btn-sm.btn-danger.btn-special(:href="'/' + contact.ID + '/delete'") Delete
+                        else
+                            .col.col-12.col-lg-3.mb-3
+                                a.text-break(v-if='!contact.First_Name && !contact.Last_Name', :href="'/' + contact.ID") No Name Provided
+                                a.text-break(v-else, :href="'/' + contact.ID") {{contact.Title}} {{contact.First_Name}} {{contact.Last_Name}}
+                            .col.col-12.col-lg-3.mb-3
+                                span.text-break {{contact.Phone_Number}}
+                                br(v-if='contact.Phone_Number')
+                                span.text-break {{contact.Email_Address}}
+                            .col.col-12.col-lg-4.mb-3
+                                span.text-break {{contact.Address}}
+                            .col.col-12.col-lg-2.mb-3
+                                input(:id="'phone' + contact.ID" type='checkbox' disabled :checked='isChecked(contact.Contact_By_Phone)')
+                                label.ms-1(:for="'phone' + contact.ID") Phone
+                                br
+                                input(:id="'email' + contact.ID" type='checkbox' disabled :checked='isChecked(contact.Contact_By_Email)')
+                                label.ms-1(:for="'email' + contact.ID") Email
+                                br
+                                input(:id="'mail' + contact.ID" type='checkbox' disabled :checked='isChecked(contact.Contact_By_Mail)')
+                                label.ms-1(:for="'Mail' + contact.ID") Mail
+        .alert.alert-info.text-center.mt-2(v-if='contacts.length === 0')
+            span(v-if='filtered') No results found for the current filter.
+            span(v-else) The contact list is currently empty. Press #[b New Contact] to add a contact!
+        #map-container
+            #map
+    script(src="/map.js")
+    script.
+        Vue.createApp({
+            data: function () {
+                return {
+                    contacts: [],
+                    filtered: false
+                }
+            },
+            mounted: function() {
+                this.init();
+            },
+            watch: {
+                contacts() {
+                    loadMarkers(this.contacts);
+                }
+            },
+            methods: {
+                async init() {
+                    const response = await axios.get('/contacts');
+                    this.contacts = response.data.contacts;
+                    initializeMap();
+                },
+                
+                isChecked(val) {
+                    if (val === 1) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                },
+
+                async filterContacts() {
+                    const response = await axios.get('/contacts');
+                    const contacts = response.data.contacts;
+
+                    let filteredContacts = [];
+                    const firstNameFilter = document.getElementById('filter-fname').value;
+                    const lastNameFilter = document.getElementById('filter-lname').value;
+                    
+                    //If both filters are empty, select all of the contacts.
+                    if (firstNameFilter === '' && lastNameFilter === '')
+                    {
+                        this.contacts = contacts;
+                        this.filtered = false;
+                        return;
+                    }
+
+                    this.filtered = true;
+
+                    for (const c of contacts) {
+                        const firstName = c.First_Name.toLowerCase();
+                        const lastName = c.Last_Name.toLowerCase();
+                        
+                        if (firstNameFilter !== '' && lastNameFilter === '') {
+                            if (firstName.indexOf(firstNameFilter.toLowerCase()) === 0) {
+                                filteredContacts.push(c);
+                            }
+                        }
+                        else if (firstNameFilter === '' && lastNameFilter !== '') {
+                            if (lastName.indexOf(lastNameFilter.toLowerCase()) === 0) {
+                                filteredContacts.push(c);
+                            }
+                        }
+                        else {
+                             if (firstName.indexOf(firstNameFilter.toLowerCase()) === 0 && lastName.indexOf(lastNameFilter.toLowerCase()) === 0)  {
+                                filteredContacts.push(c);
+                             }
+                        }
+                    }
+                    
+                    this.contacts = filteredContacts;
+                },
+
+                clickElement(e) {
+                    let row = e.target;
+
+                    //Go to the LI element that contains the lat/lng data
+                    while (row.tagName.toUpperCase() !== 'LI') {
+                        row = row.parentNode;
+                    }
+
+                    const lat = row.dataset.lat;
+                    const lng = row.dataset.lng;
+                    
+                    //If the place is unfound or the lat/long is missing, don't fly the map.
+                    if (!lat || !lng || (lat === '0' && lng === '0')) {
+                        return;
+                    }
+
+                    map.flyTo(new L.LatLng(lat, lng));
+                }
+
+            }
+
+        }).mount('#contacts')
+    

@@ -1,0 +1,22 @@
+extends layout.pug
+
+block content
+    .container.signin.mt-5
+        h1.pb-2.text-center Sign in
+        .card.bg-light-gray
+            form.form.row.g-2.mx-3.mt-1(action='/login' method ='POST')
+                .form-group.col.col-12
+                    label.form-label(for='username') Username
+                    input.form-control(name='username' required)
+                .form-group.col.col-12.mb-4
+                    label.form-label(for='password') Password
+                    input.form-control(name='password' type='password' required)
+                .form-group.col.col-6.d-grid.mx-auto
+                    button.btn.btn-primary(type='submit') Sign in
+                .form-group.col.col-12.text-center.mb-2
+                    a(href='/') Back
+                .form-group.col.col-12.text-center.mb-2
+                    span Don't have an account yet? #[a(href='/signup') Sign up]
+        if message
+            .alert.alert-danger
+                span #{message}
