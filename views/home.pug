@@ -2,7 +2,7 @@ extends layout.pug
 
 block content 
     .container#contacts
-        .wrapper(v-if='dataFetched')
+        .wrapper(v-if='dataFetched' v-cloak)
             .row
                 .col.col-7
                     h2 Contact List

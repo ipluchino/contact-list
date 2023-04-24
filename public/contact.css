@@ -37,6 +37,10 @@
     overflow-x: hidden;
 }
 
+[v-cloak] {
+    display: none;
+}
+
 /*
 li:nth-child(even) { background: rgba(0, 0, 0, 0.05) }
 */
