@@ -16,8 +16,6 @@ const loadMarkers = (contacts) => {
         map.removeLayer(markers[i]);
     }
 
-    console.log(contacts);
-
     for (const c of contacts) {
         //Adding each place as a marker on the map
         const place_info = {
