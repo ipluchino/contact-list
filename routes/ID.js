@@ -56,4 +56,14 @@ router.post('/:id/edit', logged_in, async(req, res) => {
     res.redirect('/');
 });
 
+router.get('/:id/delete', logged_in, async(req, res) => {
+    const contactInfo = await req.db.findContactByID(req.params.id);
+    res.render('delete', { contact: contactInfo });
+});
+
+router.post('/:id/delete', logged_in, async(req, res) => {
+    await req.db.deleteContact(req.params.id);
+    res.redirect('/');
+});
+
 module.exports = router;
