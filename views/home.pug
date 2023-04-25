@@ -43,6 +43,8 @@ block content
                                     span.text-break {{contact.Email_Address}}
                                 .col.col-12.col-lg-3.mb-3
                                     span.text-break {{contact.Address}}
+                                    br(v-if='contact.Latitude === 0 && contact.Longitude === 0')
+                                    span.fw-bold.text-danger(v-if='contact.Latitude === 0 && contact.Longitude === 0') Address could not be geolocated.
                                 .col.col-12.col-lg-2.mb-4.mb-lg-3
                                     input.ms-lg-3.ms-xl-4.ms-xxl-5(:id="'phone' + contact.ID" type='checkbox' disabled :checked='isChecked(contact.Contact_By_Phone)')
                                     label.ms-1(:for="'phone' + contact.ID") Phone
@@ -65,6 +67,8 @@ block content
                                     span.text-break {{contact.Email_Address}}
                                 .col.col-12.col-lg-4.mb-3
                                     span.text-break {{contact.Address}}
+                                    br(v-if='contact.Latitude === 0 && contact.Longitude === 0')
+                                    span.fw-bold.text-danger(v-if='contact.Latitude === 0 && contact.Longitude === 0') Address could not be geolocated.
                                 .col.col-12.col-lg-2.mb-3
                                     input(:id="'phone' + contact.ID" type='checkbox' disabled :checked='isChecked(contact.Contact_By_Phone)')
                                     label.ms-1(:for="'phone' + contact.ID") Phone
