@@ -9,7 +9,7 @@ const logged_in = (req, res, next) => {
         next();
     }
     else {
-        res.status(401).send("Not Authorized");
+        res.status(401).render('unauthorized', { });
     }
 }
 
