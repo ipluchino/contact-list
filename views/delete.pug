@@ -6,7 +6,7 @@ block content
             if !contact.First_Name && !contact.Last_Name
                 h3.pb-2 No Name Provided
             else
-                h3.pb-2 #{contact.First_Name} #{contact.Last_Name}
+                h3.pb-2 #{contact.Title} #{contact.First_Name} #{contact.Last_Name}
         .card.bg-light-red
             h5.mt-3.mb-4 Are you sure you want to permanently delete this contact?
             form.form(href='/' + contact.ID + '/delete' method='post')
