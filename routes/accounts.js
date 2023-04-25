@@ -35,14 +35,14 @@ router.post('/signup', async(req, res) => {
     
     //Making sure the passwords are confirmed to be the same.
     if(p1 != p2) {
-        res.render('signup', { hide_login: true, message: 'Your passwords do not match'});
+        res.render('signup', { hide_login: true, message: 'Your passwords do not match. Signup failed.'});
         return;
     }
 
     //Making sure an account with this username doesn't already exist.
     const user = await req.db.findUserByUsername(username);
     if (user) {
-        res.render('signup', { hide_login: true, message: 'An account with this username already exists'});
+        res.render('signup', { hide_login: true, message: 'An account with this username already exists. Signup failed'});
         return;
     }
     
