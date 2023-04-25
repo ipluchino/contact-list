@@ -7,14 +7,14 @@ block content
             form.form.row.mx-2.mx-sm-3.mt-1.gx-lg-4.gy-2.gy-lg-3(action='/create' method='post')
                 .form-group.col.col-12
                     h4 Basic Info
-                .form-group.col.col-3.col-lg-2
+                .form-group.col.col-5.col-sm-3.col-lg-2
                     label.form-label(for='title') Title:
-                    select.form-select.text-center(name='title')
+                    select.form-select(name='title')
                         option(selected) Mr.
                         option Ms.
                         option Mrs.
                         option Dr.
-                .form-group.col.col-9.col-lg-4
+                .form-group.col.col-7.col-sm-9.col-lg-4
                     label.form-label(for='first') First Name:
                     input.form-control(name='first')
                 .form-group.col.col-12.col-lg-6
