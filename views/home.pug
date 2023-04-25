@@ -159,6 +159,11 @@ block content
                 clickElement(e) {
                     let row = e.target;
 
+                    //Don't move the map if the element clicked is a link (edit/delete button)
+                    if (row.tagName.toUpperCase() === 'A') {
+                        return;
+                    }
+
                     //Go to the LI element that contains the lat/lng data
                     while (row.tagName.toUpperCase() !== 'LI') {
                         row = row.parentNode;
