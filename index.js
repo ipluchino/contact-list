@@ -41,7 +41,6 @@ app.set('view engine', 'pug');
 //Handles the routing for public directory.
 app.use(express.static('public'))
 
-
 //Handles all the routes dealing with obtaining the contacts.
 app.use('/contacts', require('./routes/contacts'));
 
@@ -50,6 +49,9 @@ app.use('/', require('./routes/accounts'));
 
 //Handles the routes dealing with contact creation.
 app.use('/create', require('./routes/create_contact'));
+
+//Handles all the routes dealing with specific contact IDs.
+app.use('/', require('./routes/ID'));
 
 //Handles the routes dealing with the home page.
 app.use('/', (req, res) => {

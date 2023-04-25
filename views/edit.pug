@@ -1,0 +1,48 @@
+extends layout.pug 
+
+block content 
+    .container.mt-3.mt-lg-5
+        h1.text-center.pb-2 Update Contact
+        .card.bg-light-gray.mb-4
+            form.form.row.mx-2.mx-sm-3.mt-1.gx-lg-4.gy-2.gy-lg-3(href='/' + contact.ID + '/edit' method='post')
+                .form-group.col.col-12
+                    h4 Basic Info
+                .form-group.col.col-5.col-sm-3.col-lg-2
+                    label.form-label(for='title') Title:
+                    select.form-select(name='title')
+                        option(selected = Boolean(contact.Title === 'Mr.')) Mr.
+                        option(selected = Boolean(contact.Title === 'Ms.')) Ms.
+                        option(selected = Boolean(contact.Title === 'Mrs.')) Mrs.
+                        option(selected = Boolean(contact.Title === 'Dr.')) Dr.
+                .form-group.col.col-7.col-sm-9.col-lg-4
+                    label.form-label(for='first') First Name:
+                    input.form-control(name='first' value=contact.First_Name)
+                .form-group.col.col-12.col-lg-6
+                    label.form-label(for='last') Last Name:
+                    input.form-control(name='last' value=contact.Last_Name)
+                .form-group.col.col-12.col-lg-6
+                    label.form-label(for='phone') Phone:
+                    input.form-control(type='tel' name='phone' value=contact.Phone_Number)
+                .form-group.col.col-12.col-lg-6.mb-4
+                    label.form-label(for='email') Email:
+                    input.form-control(type='email' name='email' value=contact.Email_Address)
+                .form-group.col.col-12
+                    h4 Address
+                .form-group.col.col-12.mb-4
+                    label.form-label(for='address') Full Address
+                    input.form-control(name='address' value=contact.Address)
+                .form-group.col.col-12
+                    h4 Contact Preferences
+                .form-group.col.col-12
+                    .form-check.mb-2
+                        input.form-check-input(type='checkbox' name='contact_by_phone' checked=Boolean(contact.Contact_By_Phone))
+                        label.form-check-label(for='contact_by_phone') Contact by phone
+                    .form-check.mb-2
+                        input.form-check-input(type='checkbox' name='contact_by_email' checked=Boolean(contact.Contact_By_Email))
+                        label.form-check-label(for='contact_by_email') Contact by email
+                    .form-check.mb-2
+                        input.form-check-input(type='checkbox' name='contact_by_mail' checked=Boolean(contact.Contact_By_Mail))
+                        label.form-check-label(for='contact_by_mail') Contact by mail
+                .form-group.col.col-12.mb-4
+                    button.btn.btn-primary(type='submit') Save
+                    a.btn.btn-link(href='/' + contact.ID) Cancel

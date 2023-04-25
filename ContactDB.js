@@ -74,7 +74,7 @@ class ContactDB {
         await this.db.delete('Contact', [{ column: 'ID', value: id}]);
     }
 
-    async updateContact(id, contact) {
+    async updateContact(id, person) {
         await this.db.update('Contact', [
             { column: 'First_Name', value: person.first },
             { column: 'Last_Name', value: person.last },

@@ -12,7 +12,7 @@ router.post('/', async (req, res) => {
 
     //Attempt to geolocate the address. If not found, set the latitude and longitude to 0.
     const result = await geocoder.geocode(contactInfo.address);
-    const address = (result.length > 0) ? result[0].formattedAddress : user_address;
+    const address = (result.length > 0) ? result[0].formattedAddress : contactInfo.address;
     const lat = (result.length > 0) ? result[0].latitude : 0;
     const lng = (result.length > 0) ? result[0].longitude : 0;
 
