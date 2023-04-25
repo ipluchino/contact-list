@@ -3,7 +3,7 @@ extends layout.pug
 block content 
     .container.mt-3.mt-lg-5
         h1.text-center.pb-2 Create Contact
-        .card.bg-light-gray
+        .card.bg-light-gray.mb-4
             form.form.row.mx-2.mx-sm-3.mt-1.gx-lg-4.gy-2.gy-lg-3(action='/create' method='post')
                 .form-group.col.col-12
                     h4 Basic Info
@@ -28,21 +28,9 @@ block content
                     input.form-control(type='email' name='email')
                 .form-group.col.col-12
                     h4 Address
-                .form-group.col.col-12
-                    label.form-label(for='street') Street:
-                    input.form-control(name='street')
-                .form-group.col.col-12
-                    label.form-label(for='city') City:
-                    input.form-control(name='city')
-                .form-group.col.col-12.col-lg-6
-                    label.form-label(for='state') State:
-                    input.form-control(name='state')
-                .form-group.col.col-12.col-lg-6
-                    label.form-label(for='zip') Zip:
-                    input.form-control(name='zip')
                 .form-group.col.col-12.mb-4
-                    label.form-label(for='country') Country:
-                    input.form-control(name='country')
+                    label.form-label(for='address') Full Address:
+                    input.form-control(name='address')
                 .form-group.col.col-12
                     h4 Contact Preferences
                 .form-group.col.col-12

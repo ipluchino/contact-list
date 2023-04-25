@@ -10,18 +10,8 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     const contactInfo = req.body;
 
-    //Obtain the address in one string from the information provided.
-    const addr = [
-        contactInfo.street.trim(),
-        contactInfo.city.trim(),
-        contactInfo.state.trim(),
-        contactInfo.zip.trim(),
-        contactInfo.country.trim()
-    ];
-    const user_address = addr.join(' ');
-
     //Attempt to geolocate the address. If not found, set the latitude and longitude to 0.
-    const result = await geocoder.geocode(user_address);
+    const result = await geocoder.geocode(contactInfo.address);
     const address = (result.length > 0) ? result[0].formattedAddress : user_address;
     const lat = (result.length > 0) ? result[0].latitude : 0;
     const lng = (result.length > 0) ? result[0].longitude : 0;
