@@ -43,7 +43,7 @@ app.use(express.static('public'))
 
 
 //Handles all the routes dealing with obtaining the contacts.
-app.use('/contacts', require('./routes/root'));
+app.use('/contacts', require('./routes/contacts'));
 
 //Handles all the routes dealing with accounts.
 app.use('/', require('./routes/accounts'));
