@@ -69,7 +69,8 @@ router.post('/:id/edit', logged_in, async(req, res) => {
     
     //Send over an error message if the contact that was just edited could not be geolocated.
     if (unfound) {
-        req.flash('msg', 'Warning: The address of the contact that you just edited could not be geolocated!');
+        const name = (!person.First_Name && !person.Last_Name) ? 'No Name Provided' : `${person.Title} ${person.First_Name} ${person.Last_Name}`;
+        req.flash('msg', `Warning: The address of the contact that you just edited, ${name}, could not be geolocated!`);
     }
 
     res.redirect('/');

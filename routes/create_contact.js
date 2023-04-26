@@ -9,6 +9,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const contactInfo = req.body;
+    let unfound = false;
 
     //Attempt to geolocate the address. If not found, set the latitude and longitude to 0.
     const result = await geocoder.geocode(contactInfo.address);
@@ -31,7 +32,15 @@ router.post('/', async (req, res) => {
         longitude: lng
     }
 
+    if (lat === 0 && lng === 0) unfound = true;
+
     await req.db.createContact(contact);
+
+    //Send over an error message if the contact that was just created could not be geolocated.
+    if (unfound) {
+        const name = (!contactInfo.first && !contactInfo.last) ? 'No Name Provided' : `${contactInfo.title} ${contactInfo.first} ${contactInfo.last}`;
+        req.flash('msg', `Warning: The address of the contact that you just created, ${name}, could not be geolocated!`);
+    }
 
     res.redirect('/');
 });
