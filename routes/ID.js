@@ -13,6 +13,15 @@ const logged_in = (req, res, next) => {
     }
 }
 
+router.get('/:id', async (req, res) => {
+    const contactInfo = await req.db.findContactByID(req.params.id);
+    if (!contactInfo) {
+        res.status(404).send("Contact Not Found");
+        return;
+    }
+    res.render('viewID', { contact: contactInfo });
+});
+
 router.get('/:id/edit', logged_in, async(req, res) => {
     const contactInfo = await req.db.findContactByID(req.params.id);
     res.render('edit', { contact: contactInfo });

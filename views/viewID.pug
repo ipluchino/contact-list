@@ -1,0 +1,65 @@
+extends layout.pug 
+
+block content
+    .container
+        .row
+            .col.col-12
+                h1 Contact Info
+        .row
+            .col.col-7
+                if !contact.First_Name && !contact.Last_Name
+                    h3 No Name Provided
+                else
+                    h3.text-break #{contact.Title} #{contact.First_Name + ' ' + contact.Last_Name}
+            .col.col-5
+                a.btn.btn-primary.float-end.phone-btn(href='/') Back to list
+        .row
+            .col.col-12
+                hr
+        .row
+            .col.col-12.col-lg-8.mb-4
+                span
+                    b Phone number: 
+                    span.text-break #{contact.Phone_Number}
+                br
+                span      
+                    if contact.Contact_By_Phone
+                        i May be contacted by phone or text
+                    else
+                        i May NOT be contacted by phone or text
+            .col.col-12.col-lg-4.mb-4
+                span
+                    b Email address: 
+                    span.text-break #{contact.Email_Address}
+                br
+                span
+                    if contact.Contact_By_Email
+                        i May be contacted by email
+                    else
+                        i May NOT be contacted by email
+        .row
+            .col.col-12.col-lg-5.mb-4
+                span.text-break
+                    b Address: 
+                    section #{contact.Address}
+            .col.col-12
+                if contact.Latitude === 0 && contact.Longitude === 0
+                    span.fw-bold.text-danger Address could not be geolocated!
+                else
+                    span.text-break
+                        b Latitude: 
+                        span #{contact.Latitude}
+                        br
+                        b Longitude: 
+                        span #{contact.Longitude}
+        .row
+            .col.col-12
+                hr
+        if user
+            .row
+                .col.col-12
+                    .btn-group
+                        a.btn.btn-primary(href='/' + contact.ID + '/edit') Edit contact
+                        a.btn.btn-danger(href='/' + contact.ID + '/delete') Delete contact
+                
+        
