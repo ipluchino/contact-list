@@ -9,6 +9,10 @@ block content
                 .col.col-5.mb-3
                     a.btn.btn-primary.float-end.phone-btn(href='/create') New Contact
             ul.list-group.scroll.mb-3
+                if msg != ''
+                    .alert.alert-danger.alert-dismissible.fade.show.error-msg.text-center
+                        span #{msg}
+                        btn.btn-close(type='button', data-bs-dismiss="alert")
                 li.list-group-item
                     .container
                         .row
@@ -55,7 +59,7 @@ block content
                                     input.ms-lg-3.ms-xl-4.ms-xxl-5(:id="'mail' + contact.ID" type='checkbox' disabled :checked='isChecked(contact.Contact_By_Mail)')
                                     label.ms-1(:for="'Mail' + contact.ID") Mail
                                 .col.text-center
-                                    a.btn.btn-sm.btn-primary.btn-special.mb-lg-2.mt-lg-1.me-3.me-lg-0(:href="'/' + contact.ID + '/edit'") Edit
+                                    a.btn.btn-sm.btn-primary.btn-special.mb-lg-2.mt-lg-2.me-3.me-lg-0(:href="'/' + contact.ID + '/edit'") Edit
                                     a.btn.btn-sm.btn-danger.btn-special(:href="'/' + contact.ID + '/delete'") Delete
                             else
                                 .col.col-12.col-lg-3.mb-3

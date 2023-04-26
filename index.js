@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const flash = require('connect-flash');
 
 //Initalizing the database.
 const Database = require('./ContactDB');
@@ -23,6 +24,8 @@ app.use(session({
     saveUninitialized: true,
     cookie: {secure: false}
 }))
+
+app.use(flash());
 
 //Middleware to allow the pug templates to see the session.
 app.use((req, res, next) => {
@@ -55,7 +58,7 @@ app.use('/', require('./routes/ID'));
 
 //Handles the routes dealing with the home page.
 app.use('/', (req, res) => {
-    res.render('home', {});
+    res.render('home', {msg: req.flash('msg')});
 });
 
 /*
