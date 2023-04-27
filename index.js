@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
+const bodyParser = require('body-parser');
 
 //Initalizing the database.
 const Database = require('./ContactDB');
@@ -43,6 +44,8 @@ app.set('view engine', 'pug');
 
 //Handles the routing for public directory.
 app.use(express.static('public'))
+
+app.use(bodyParser.json());
 
 //Handles all the routes dealing with obtaining the contacts.
 app.use('/contacts', require('./routes/contacts'));

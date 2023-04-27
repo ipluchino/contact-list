@@ -16,10 +16,21 @@ block content
                 li.list-group-item
                     .container
                         .row
+                            .col.col-12.col-lg-6.mb-2.mt-2
+                                input.form-control#filter-fname(name='filter-first-name' placeholder='Filter By First Name' @input='filterContacts()')
+                            .col.col-12.col-lg-6.mb-2.mt-2
+                                input.form-control#filter-lname(name='filter-last-name' placeholder='Filter By Last Name' @input='filterContacts()')
                             .col.col-12.col-lg-3.mb-2.mt-2
-                                input.form-control#filter-fname(name='filter-first-name' placeholder = 'Filter By First Name' @input='filterContacts()')
-                            .col.col-12.col-lg-3.mb-2.mt-2
-                                input.form-control#filter-lname(name='filter-last-name' placeholder = 'Filter By Last Name' @input='filterContacts()')
+                                select.form-select
+                                    option(selected) Select a Range
+                                    option 5 Miles
+                                    option 10 Miles
+                                    option 25 Miles
+                            .col.col-12.col-lg-6.mb-2.mt-2
+                                input.form-control#filter-geolocation(name='filter-geolocation' placeholder = 'Filter By Address')
+                            .col.col-12.col-lg-3.mb-2.mt-2.d-grid.mx-auto
+                                btn.btn.btn-primary(@click='filterByLocation()') Search By Proximity
+
                 li.list-group-item.d-none.d-lg-block
                     .container
                         .row.fw-bold
@@ -162,6 +173,13 @@ block content
                     }
                     
                     this.contacts = filteredContacts;
+                },
+
+                async filterByLocation () {
+                    const addressFilter = document.getElementById('filter-geolocation').value;
+                    console.log('I am here');
+                    const response = await axios.post('/contacts', { address: addressFilter });
+                    console.log(response.data.result);
                 },
 
                 clickElement(e) {
