@@ -12,24 +12,24 @@ block content
                 if msg != ''
                     .alert.alert-danger.alert-dismissible.fade.show.error-msg.text-center
                         span #{msg}
-                        btn.btn-close(type='button', data-bs-dismiss="alert")
+                        button.btn-close(type='button', data-bs-dismiss="alert")
                 li.list-group-item
                     .container
                         .row
                             .col.col-12.col-lg-6.mb-2.mt-2
-                                input.form-control#filter-fname(name='filter-first-name' placeholder='Filter By First Name' @input='filterContacts()')
+                                input.form-control#filter-fname(name='filter-first-name' placeholder='Filter By First Name' @input='filterByName()')
                             .col.col-12.col-lg-6.mb-2.mt-2
-                                input.form-control#filter-lname(name='filter-last-name' placeholder='Filter By Last Name' @input='filterContacts()')
+                                input.form-control#filter-lname(name='filter-last-name' placeholder='Filter By Last Name' @input='filterByName()')
                             .col.col-12.col-lg-3.mb-2.mt-2
-                                select.form-select
-                                    option(selected) Select a Range
-                                    option 5 Miles
-                                    option 10 Miles
-                                    option 25 Miles
+                                select.form-select#filter-range
+                                    option(selected value='5') Within 5 Miles
+                                    option(value = '10') Within 10 Miles
+                                    option(value = '25') Within 25 Miles
                             .col.col-12.col-lg-6.mb-2.mt-2
                                 input.form-control#filter-geolocation(name='filter-geolocation' placeholder = 'Filter By Address')
                             .col.col-12.col-lg-3.mb-2.mt-2.d-grid.mx-auto
-                                btn.btn.btn-primary(@click='filterByLocation()') Search By Proximity
+                                button.btn.btn-primary(v-if='!locationFiltered' @click='filterByLocation()') Search By Proximity
+                                button.btn.btn-danger(v-else @click='clearLocationFilter()') Clear Address
 
                 li.list-group-item.d-none.d-lg-block
                     .container
@@ -94,7 +94,7 @@ block content
                                     input(:id="'mail' + contact.ID" type='checkbox' disabled :checked='isChecked(contact.Contact_By_Mail)')
                                     label.ms-1(:for="'Mail' + contact.ID") Mail
             .alert.alert-info.text-center.mt-2(v-if='contacts.length === 0')
-                span(v-if='filtered') No results found for the current filter.
+                span(v-if='nameFiltered || locationFiltered') No results found for the current filter.
                 span(v-else) The contact list is currently empty. Press #[b New Contact] to add a contact!
         #map-container
             #map
@@ -104,7 +104,9 @@ block content
             data: function () {
                 return {
                     contacts: [],
-                    filtered: false,
+                    geoLocatedContacts: [],
+                    nameFiltered: false,
+                    locationFiltered: false,
                     dataFetched: false
                 }
             },
@@ -113,6 +115,7 @@ block content
             },
             watch: {
                 contacts() {
+                    console.log(this.contacts);
                     loadMarkers(this.contacts);
                 }
             },
@@ -133,10 +136,17 @@ block content
                     }
                 },
 
-                async filterContacts() {
-                    const response = await axios.get('/contacts');
-                    const contacts = response.data.contacts;
+                async filterByName() {
+                    let contacts;
 
+                    if (this.locationFiltered) {
+                        contacts = this.geoLocatedContacts;
+                    }
+                    else {
+                        const response = await axios.get('/contacts');
+                        contacts = response.data.contacts;
+                    }
+                
                     let filteredContacts = [];
                     const firstNameFilter = document.getElementById('filter-fname').value;
                     const lastNameFilter = document.getElementById('filter-lname').value;
@@ -145,11 +155,11 @@ block content
                     if (firstNameFilter === '' && lastNameFilter === '')
                     {
                         this.contacts = contacts;
-                        this.filtered = false;
+                        this.nameFiltered = false;
                         return;
                     }
 
-                    this.filtered = true;
+                    this.nameFiltered = true;
 
                     for (const c of contacts) {
                         const firstName = c.First_Name.toLowerCase();
@@ -175,11 +185,40 @@ block content
                     this.contacts = filteredContacts;
                 },
 
-                async filterByLocation () {
-                    const addressFilter = document.getElementById('filter-geolocation').value;
-                    console.log('I am here');
-                    const response = await axios.post('/contacts', { address: addressFilter });
-                    console.log(response.data.result);
+                async filterByLocation () {                    
+                    const contactsResponse = await axios.get('/contacts');
+                    const contacts = contactsResponse.data.contacts;
+                    
+                    this.locationFiltered = true;
+                    const addressFilter = document.getElementById('filter-geolocation');
+                    const rangeFilter = document.getElementById('filter-range');
+                    const firstNameFilter = document.getElementById('filter-fname');
+                    const lastNameFilter = document.getElementById('filter-lname');
+
+                    //Clear out all the other filters, including the name filter.
+                    addressFilter.setAttribute('disabled', 'true');
+                    rangeFilter.setAttribute('disabled', 'true');
+
+                    const response = await axios.post('/contacts', { contacts: contacts, address: addressFilter.value, range: rangeFilter.value });
+                    
+                    if (response.data.unfound) {
+                        console.log('Unknown Address');
+                    }
+                    else {
+                        this.geoLocatedContacts = response.data.filteredContacts;
+                        this.filterByName();
+                    }
+                },
+
+                clearLocationFilter() {
+                    this.locationFiltered = false;
+                    
+                    const addressFilter = document.getElementById('filter-geolocation');
+                    const rangeFilter = document.getElementById('filter-range');
+                    addressFilter.removeAttribute('disabled');
+                    rangeFilter.removeAttribute('disabled');
+                    addressFilter.value = '';
+                    this.filterByName();
                 },
 
                 clickElement(e) {
