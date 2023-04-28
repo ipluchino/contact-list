@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
         return;
     }
 
-    res.json({filteredContacts: filteredContacts, unfound: unfound});
+    res.json({filteredContacts: filteredContacts, lat: result[0].latitude, lng: result[0].longitude, unfound: unfound});
 });
 
 //This function takes an address and a list of contacts to search through. It returns a list of contacts that are within the proximity.

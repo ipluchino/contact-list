@@ -115,7 +115,6 @@ block content
             },
             watch: {
                 contacts() {
-                    console.log(this.contacts);
                     loadMarkers(this.contacts);
                 }
             },
@@ -199,14 +198,16 @@ block content
                     addressFilter.setAttribute('disabled', 'true');
                     rangeFilter.setAttribute('disabled', 'true');
 
-                    const response = await axios.post('/contacts', { contacts: contacts, address: addressFilter.value, range: rangeFilter.value });
+                    const filterResponse = await axios.post('/contacts', { contacts: contacts, address: addressFilter.value, range: rangeFilter.value });
                     
-                    if (response.data.unfound) {
+                    if (filterResponse.data.unfound) {
                         console.log('Unknown Address');
                     }
                     else {
-                        this.geoLocatedContacts = response.data.filteredContacts;
+                        this.geoLocatedContacts = filterResponse.data.filteredContacts;
                         this.filterByName();
+                        map.flyTo(new L.LatLng(filterResponse.data.lat, filterResponse.data.lng))
+
                     }
                 },
 
