@@ -94,7 +94,8 @@ block content
                                     input(:id="'mail' + contact.ID" type='checkbox' disabled :checked='isChecked(contact.Contact_By_Mail)')
                                     label.ms-1(:for="'Mail' + contact.ID") Mail
             .alert.alert-info.text-center.mt-2(v-if='contacts.length === 0')
-                span(v-if='nameFiltered || locationFiltered') No results found for the current filter.
+                span(v-if='unknownLocation') The address you provided could not be geolocated. Please clear the address and try again!
+                span(v-else-if='nameFiltered || locationFiltered') No results found for the current filter!
                 span(v-else) The contact list is currently empty. Press #[b New Contact] to add a contact!
         #map-container
             #map
@@ -107,6 +108,7 @@ block content
                     geoLocatedContacts: [],
                     nameFiltered: false,
                     locationFiltered: false,
+                    unknownLocation: false,
                     dataFetched: false
                 }
             },
@@ -202,6 +204,9 @@ block content
                     
                     if (filterResponse.data.unfound) {
                         console.log('Unknown Address');
+                        this.geoLocatedContacts = [];
+                        this.filterByName();
+                        this.unknownLocation = true;
                     }
                     else {
                         this.geoLocatedContacts = filterResponse.data.filteredContacts;
@@ -213,6 +218,7 @@ block content
 
                 clearLocationFilter() {
                     this.locationFiltered = false;
+                    this.unknownLocation = false;
                     
                     const addressFilter = document.getElementById('filter-geolocation');
                     const rangeFilter = document.getElementById('filter-range');
