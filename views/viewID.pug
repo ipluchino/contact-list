@@ -14,6 +14,10 @@ block content
             .col.col-5
                 a.btn.btn-primary.float-end.phone-btn(href='/') Back to list
         .row
+            if msg != ''
+                .alert.alert-danger.alert-dismissible.fade.show.error-msg.text-center.mt-2.mb-2
+                    span #{msg}
+                    button.btn-close(type='button', data-bs-dismiss="alert")
             .col.col-12
                 hr
         .row

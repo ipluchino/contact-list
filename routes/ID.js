@@ -19,7 +19,7 @@ router.get('/:id', async (req, res) => {
         res.status(404).render('notfound', { });
         return;
     }
-    res.render('viewID', { contact: contactInfo });
+    res.render('viewID', { contact: contactInfo, msg: req.flash('msg')});
 });
 
 router.get('/:id/edit', logged_in, async(req, res) => {
@@ -28,7 +28,26 @@ router.get('/:id/edit', logged_in, async(req, res) => {
         res.status(404).render('notfound', { });
         return;
     }
-    res.render('edit', { contact: contactInfo });
+
+    //Determine who the refer is, so the application can send you back to the page you were last on.
+    //This is because there are two edit buttons, one on the home page and one on :/id.
+    let link = '';
+    if (req.headers.referer) {
+        link = req.headers.referer.substring(req.headers.referer.lastIndexOf('/'));
+
+        if (link !== '/' && link !== ('/' + req.params.id)) {
+            //Default to the root as the referer if the referer is not / or /:id.
+            link = '/';
+        }
+    }
+    else {
+        //Make the default referer go back to the root if it doesn't exist (ex: someone blocking their referer information).
+        link = '/';
+    }
+
+    console.log('refer: ' + link);
+    req.flash('refer', link);
+    res.render('edit', { contact: contactInfo, refer: link });
 });
 
 router.post('/:id/edit', logged_in, async(req, res) => {
@@ -77,7 +96,9 @@ router.post('/:id/edit', logged_in, async(req, res) => {
         req.flash('msg', `Warning: The address of the contact that you just edited, ${name}, could not be geolocated!`);
     }
 
-    res.redirect('/');
+    //Redirect to where the user clicked on the edit button (either / or /:id)
+    const referer = req.flash('refer');
+    res.redirect(referer[referer.length-1]);
 });
 
 router.get('/:id/delete', logged_in, async(req, res) => {
@@ -86,7 +107,24 @@ router.get('/:id/delete', logged_in, async(req, res) => {
         res.status(404).render('notfound', { });
         return;
     }
-    res.render('delete', { contact: contactInfo });
+
+    //Determine who the refer is, so the application can send you back to the page you were last on.
+    //This is because there are two delete buttons, one on the home page and one on :/id.
+    let link = '';
+    if (req.headers.referer) {
+        link = req.headers.referer.substring(req.headers.referer.lastIndexOf('/'));
+
+        if (link !== '/' && link !== ('/' + req.params.id)) {
+            //Default to the root as the referer if the referer is not / or /:id.
+            link = '/';
+        }
+    }
+    else {
+        //Make the default referer go back to the root if it doesn't exist (ex: someone blocking their referer information).
+        link = '/';
+    }
+
+    res.render('delete', { contact: contactInfo, refer: link });
 });
 
 router.post('/:id/delete', logged_in, async(req, res) => {
