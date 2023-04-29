@@ -45,7 +45,10 @@ router.get('/:id/edit', logged_in, async(req, res) => {
         link = '/';
     }
 
-    console.log('refer: ' + link);
+    //Clear the current refer flash.
+    req.flash('refer');
+
+    //Cet the refer flash to the newest link. 
     req.flash('refer', link);
     res.render('edit', { contact: contactInfo, refer: link });
 });
@@ -97,8 +100,7 @@ router.post('/:id/edit', logged_in, async(req, res) => {
     }
 
     //Redirect to where the user clicked on the edit button (either / or /:id)
-    const referer = req.flash('refer');
-    res.redirect(referer[referer.length-1]);
+    res.redirect(req.flash('refer'));
 });
 
 router.get('/:id/delete', logged_in, async(req, res) => {
