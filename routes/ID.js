@@ -16,7 +16,7 @@ const logged_in = (req, res, next) => {
 router.get('/:id', async (req, res) => {
     const contactInfo = await req.db.findContactByID(req.params.id);
     if (!contactInfo) {
-        res.status(404).send("Contact Not Found");
+        res.status(404).render('notfound', { });
         return;
     }
     res.render('viewID', { contact: contactInfo });
@@ -24,6 +24,10 @@ router.get('/:id', async (req, res) => {
 
 router.get('/:id/edit', logged_in, async(req, res) => {
     const contactInfo = await req.db.findContactByID(req.params.id);
+    if (!contactInfo) {
+        res.status(404).render('notfound', { });
+        return;
+    }
     res.render('edit', { contact: contactInfo });
 });
 
@@ -78,6 +82,10 @@ router.post('/:id/edit', logged_in, async(req, res) => {
 
 router.get('/:id/delete', logged_in, async(req, res) => {
     const contactInfo = await req.db.findContactByID(req.params.id);
+    if (!contactInfo) {
+        res.status(404).render('notfound', { });
+        return;
+    }
     res.render('delete', { contact: contactInfo });
 });
 
