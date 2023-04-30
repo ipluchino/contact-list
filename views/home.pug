@@ -211,7 +211,7 @@ block content
                     else {
                         this.geoLocatedContacts = filterResponse.data.filteredContacts;
                         this.filterByName();
-                        map.flyTo(new L.LatLng(filterResponse.data.lat, filterResponse.data.lng))
+                        map.flyTo(new L.LatLng(filterResponse.data.lat, filterResponse.data.lng), 13)
 
                     }
                 },
@@ -226,6 +226,8 @@ block content
                     rangeFilter.removeAttribute('disabled');
                     addressFilter.value = '';
                     this.filterByName();
+
+                    map.flyTo(new L.LatLng(39, -95), 4);
                 },
 
                 clickElement(e) {
@@ -249,7 +251,7 @@ block content
                         return;
                     }
 
-                    map.flyTo(new L.LatLng(lat, lng));
+                    map.flyTo(new L.LatLng(lat, lng), 13);
                 }
 
             }
