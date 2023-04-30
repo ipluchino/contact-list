@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
     res.json({filteredContacts: filteredContacts, lat: result[0].latitude, lng: result[0].longitude, unfound: unfound});
 });
 
-//This function takes an address and a list of contacts to search through. It returns a list of contacts that are within the proximity.
+//This function takes an address, a distance range, and a list of contacts to search through. It returns a list of contacts that are within the proximity.
 const searchByProximity = (contacts, address, range) => {
     const lat = address.latitude;
     const lng = address.longitude;

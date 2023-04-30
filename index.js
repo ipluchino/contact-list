@@ -8,9 +8,13 @@ const Database = require('./ContactDB');
 const db = new Database();
 db.initialize();
 
+//Express configurations
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.locals.pretty = true;
+app.use(flash());
+app.set('view engine', 'pug');
+app.use(bodyParser.json());
 
 //Middleware to attach the database to the request object
 app.use((req, res, next) => {
@@ -40,14 +44,10 @@ app.use((req, res, next) => {
     next();
 })
 
-app.set('view engine', 'pug');
-
 //Handles the routing for public directory.
 app.use(express.static('public'))
 
-app.use(bodyParser.json());
-
-//Handles all the routes dealing with obtaining the contacts.
+//Handles all the routes dealing with obtaining and geolocating the contacts.
 app.use('/contacts', require('./routes/contacts'));
 
 //Handles all the routes dealing with accounts.
@@ -63,11 +63,6 @@ app.use('/', require('./routes/ID'));
 app.use('/', (req, res) => {
     res.render('home', {msg: req.flash('msg')});
 });
-
-/*
-//Handles all the routes dealing with specific contact IDs.
-app.use('/', require('./routes/ID'));
-*/
 
 app.listen(8080, () => {
     console.log('Server is running on port 8080')

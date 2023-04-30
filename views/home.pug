@@ -140,6 +140,8 @@ block content
                 async filterByName() {
                     let contacts;
 
+                    //If there is a geolocation filter active, only consider the contacts that satisfy the proximity search.
+                    //Otherwise, search through all contacts in the contact list. 
                     if (this.locationFiltered) {
                         contacts = this.geoLocatedContacts;
                     }
@@ -152,7 +154,7 @@ block content
                     const firstNameFilter = document.getElementById('filter-fname').value;
                     const lastNameFilter = document.getElementById('filter-lname').value;
                     
-                    //If both filters are empty, select all of the contacts.
+                    //If both filters are empty, there is nothing to filter.
                     if (firstNameFilter === '' && lastNameFilter === '')
                     {
                         this.contacts = contacts;
@@ -166,16 +168,19 @@ block content
                         const firstName = c.First_Name.toLowerCase();
                         const lastName = c.Last_Name.toLowerCase();
                         
+                        //Filtering by first name and last name.
                         if (firstNameFilter !== '' && lastNameFilter === '') {
                             if (firstName.indexOf(firstNameFilter.toLowerCase()) === 0) {
                                 filteredContacts.push(c);
                             }
                         }
+                        //Filtering by only last name.
                         else if (firstNameFilter === '' && lastNameFilter !== '') {
                             if (lastName.indexOf(lastNameFilter.toLowerCase()) === 0) {
                                 filteredContacts.push(c);
                             }
                         }
+                        //Filtering by only first name.
                         else {
                              if (firstName.indexOf(firstNameFilter.toLowerCase()) === 0 && lastName.indexOf(lastNameFilter.toLowerCase()) === 0)  {
                                 filteredContacts.push(c);
@@ -187,27 +192,31 @@ block content
                 },
 
                 async filterByLocation () {                    
+                    //Obtain the entire contact list.
                     const contactsResponse = await axios.get('/contacts');
                     const contacts = contactsResponse.data.contacts;
-                    
                     this.locationFiltered = true;
+
                     const addressFilter = document.getElementById('filter-geolocation');
                     const rangeFilter = document.getElementById('filter-range');
                     const firstNameFilter = document.getElementById('filter-fname');
                     const lastNameFilter = document.getElementById('filter-lname');
 
-                    //Clear out all the other filters, including the name filter.
+                    //Disable the address and range filter.
                     addressFilter.setAttribute('disabled', 'true');
                     rangeFilter.setAttribute('disabled', 'true');
 
+                    //Geolocate the address provided.
                     const filterResponse = await axios.post('/contacts', { contacts: contacts, address: addressFilter.value, range: rangeFilter.value });
                     
+                    //If the address provided cannot be found, the result is simply an empty array.
+                    //Also set the unknownLocation variable to be true so the error can be seen by the user.
                     if (filterResponse.data.unfound) {
-                        console.log('Unknown Address');
                         this.geoLocatedContacts = [];
                         this.filterByName();
                         this.unknownLocation = true;
                     }
+                    //Otherwise, set the geolocated contacts to the response and apply the name filter so the contact list updates.
                     else {
                         this.geoLocatedContacts = filterResponse.data.filteredContacts;
                         this.filterByName();
@@ -222,9 +231,13 @@ block content
                     
                     const addressFilter = document.getElementById('filter-geolocation');
                     const rangeFilter = document.getElementById('filter-range');
+
+                    //The address and range filter should be active again after the current proximity search is cleared.
                     addressFilter.removeAttribute('disabled');
                     rangeFilter.removeAttribute('disabled');
                     addressFilter.value = '';
+                    
+                    //Refilter by name, if there were any present.
                     this.filterByName();
 
                     map.flyTo(new L.LatLng(39, -95), 4);
@@ -233,7 +246,7 @@ block content
                 clickElement(e) {
                     let row = e.target;
 
-                    //Don't move the map if the element clicked is a link (edit/delete button)
+                    //Don't move the map if the element clicked is a link (edit/delete/view button)
                     if (row.tagName.toUpperCase() === 'A') {
                         return;
                     }
