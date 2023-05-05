@@ -14,15 +14,18 @@ html
     body
         if !hide_login 
             navbar.navbar.navbar-expand.bg-dark.navbar-dark.mb-5
+                ul.navbar-nav
+                    li.nav-item
+                        a.nav-link.text-white(href='/') Home
                 if user
-                    ul.navbar-nav.ml-auto
-                        li.nav-item
+                    ul.navbar-nav
+                        li.nav-item.ms-3
                             span.navbar-text.text-white.ms-1 #{user.first_name} #{user.last_name}
                     ul.navbar-nav.ms-auto
                         li.nav-item
                             a.nav-link.text-white(href='/logout') Log out
                 else
-                    ul.navbar-nav.ml-auto
+                    ul.navbar-nav.ms-auto
                         li.nav-item
                             a.nav-link.text-white(href='/login') Sign in
         block content

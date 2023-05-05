@@ -1,8 +1,8 @@
 let map = undefined;
 markers = [];
 
+//Initializes the map
 const initializeMap = () => {
-    console.log('initializing map');
     map = L.map('map').setView([39, -95], 3);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
