@@ -45,7 +45,14 @@ block content
             .col.col-12.col-lg-5.mb-4
                 span.text-break
                     b Address: 
-                    section #{contact.Address}
+                     
+                    span #{contact.Address}
+                br
+                span
+                    if contact.Contact_By_Mail
+                        i May be contacted by mail
+                    else
+                        i May NOT be contacted by mail
             .col.col-12
                 if contact.Latitude === 0 && contact.Longitude === 0
                     span.fw-bold.text-danger Address could not be geolocated!

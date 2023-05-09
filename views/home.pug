@@ -215,6 +215,7 @@ block content
                         this.geoLocatedContacts = [];
                         this.filterByName();
                         this.unknownLocation = true;
+                        map.flyTo(new L.LatLng(39, -95), 3);
                     }
                     //Otherwise, set the geolocated contacts to the response and apply the name filter so the contact list updates.
                     else {

@@ -41,10 +41,6 @@
     display: none;
 }
 
-/*
-li:nth-child(even) { background: rgba(0, 0, 0, 0.05) }
-*/
-
 @media screen and (width < 992px) {
     .fix-border-top {
         border-top: 1px solid !important; 

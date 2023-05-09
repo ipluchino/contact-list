@@ -10,6 +10,7 @@ const initializeMap = () => {
     }).addTo(map);
 }
 
+//Loads all of the markers on to the map
 const loadMarkers = (contacts) => {
     //Clearing the markers currently on the map
     for (let i = 0; i < markers.length; i++) {
