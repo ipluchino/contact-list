@@ -5,4 +5,4 @@ This project is a full-stack Node.js web application which allows for the creati
 Additionally, all contacts entered in to the website are geo-located with an accurate latitude and longitude. These geo-located maps are then placed on to an interactive map from OpenStreetMap on the home page. Contacts can be filtered by location within specified ranges of 5, 10, and 15 miles. 
 
 ## Demonstration
-The contact list is hosted here: https://contact-list-kbbw.onrender.com/
+The contact list is hosted here (the website may take 30-60 seconds to open the first time): https://contact-list-kbbw.onrender.com/
